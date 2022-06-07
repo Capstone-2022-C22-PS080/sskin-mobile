@@ -2,36 +2,30 @@ package com.example.skindiseasedetectionapp.ui.auth.login
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
-import com.example.skindiseasedetectionapp.MainActivity
 import com.example.skindiseasedetectionapp.R
 import com.example.skindiseasedetectionapp.databinding.ActivityLoginBinding
 import com.example.skindiseasedetectionapp.setting.SettingDatastore
 import com.example.skindiseasedetectionapp.ui.auth.register.RegisterActivity
-import com.example.skindiseasedetectionapp.ui.auth.register.RegisterViewModel
 import com.example.skindiseasedetectionapp.ui.dashboard.DashboardActivity
-import com.example.skindiseasedetectionapp.ui.home.SettingActivity
 import com.example.skindiseasedetectionapp.utill.ViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import kotlin.math.sign
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var auth : FirebaseAuth
+
     private lateinit var viewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,9 +35,10 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
 
+        val pref = SettingDatastore.getInstance(dataStore)
         viewModel = ViewModelProvider(
             this,
-            ViewModelFactory(SettingDatastore.getInstance(dataStore))
+            ViewModelFactory(pref)
         )[LoginViewModel::class.java]
         viewModel.loading.observe(this){
 
@@ -53,32 +48,22 @@ class LoginActivity : AppCompatActivity() {
         viewModel.messageLogin.observe(this) {
             it.getContentIfNotHandled().let { str ->
                 toasting(str.toString())
-                if(str!!.contains("Successfully")){
-                    finish()
-                    startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
-                }
-
             }
         }
+
 
         viewModel.messageAddFirebaseUser.observe(this) {
             it.getContentIfNotHandled().let { str ->
-                if (str!!.contains("success")) {
-                    clearInput()
-                }
-                toasting(str.toString())
+                    toasting(str.toString())
+                    if(str.toString().contains("Success")){
+                        clearInput()
+                        finish()
+                        startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
+
+                    }
             }
         }
 
-        viewModel.currentUser.observe(this){
-            if(it != null){
-                updateUI(it)
-            }else{
-                updateUI(null)
-            }
-        }
-
-        auth = Firebase.auth
 
         binding.tvSignUp.setOnClickListener {
             startActivity(Intent(this,RegisterActivity::class.java))
@@ -137,48 +122,7 @@ class LoginActivity : AppCompatActivity() {
 
 
 
-    private fun signIn(email: String, password: String) {
-        // [START sign_in_with_email]
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithEmail:success")
-                    val user = auth.currentUser
-                    showLoading(false)
-                    updateUI(user)
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithEmail:failure", task.exception)
-                    showLoading(false)
-                    toasting(resources.getString(R.string.auth_failed))
-                    updateUI(null)
-                }
-            }
-    }
 
-    private fun updateUI(currentuser : FirebaseUser?){
-        if (currentuser != null){
-            toasting(currentuser.uid)
-            startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
-            finish()
-        }
-    }
-
-    private fun reload() {
-
-    }
-
-    override fun onStart() {
-        super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
-            viewModel.currentUser.observe(this){
-
-                updateUI(it)
-            }
-//        val currentUser = auth.currentUser
-//        updateUI(currentUser)
-    }
 
 
     companion object{
