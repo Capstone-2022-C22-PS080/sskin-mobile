@@ -3,7 +3,7 @@ package com.example.skindiseasedetectionapp.setting
 import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
-import com.example.skindiseasedetectionapp.model.InUserModel
+import com.example.skindiseasedetectionapp.setting.SettingDatastore.PreferencesKeys.TOKEN
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -12,27 +12,11 @@ import java.io.IOException
 
 class SettingDatastore private constructor(private val dataStore: DataStore<Preferences>) {
 
-    private val ID = stringPreferencesKey("userId")
-    private val NAME = stringPreferencesKey("name")
-    private val EMAIL = stringPreferencesKey("email")
     private val JWT_TOKEN = stringPreferencesKey("jwt_token")
-    private val PHOTO_PROFILE = stringPreferencesKey("photo_profile")
-    private val DEFAULT_PROFILE = intPreferencesKey("default_profile")
 
 
-    fun getData(): Flow<InUserModel> {
-        return dataStore.data.map { preferences ->
-            val id = preferences[ID] ?: ""
-            val email = preferences[EMAIL] ?: ""
-            val name = preferences[NAME] ?: ""
-            val default = preferences[DEFAULT_PROFILE] ?: 1
-            val photo = preferences[PHOTO_PROFILE] ?: ""
-            val jwtToken = preferences[JWT_TOKEN] ?: ""
-            InUserModel(id,email,name,default,photo,jwtToken,null)
-        }
-    }
 
-    val readFromDataStore : Flow<InUserModel> = dataStore.data
+    val readFromDataStore : Flow<String> = dataStore.data
         .catch { exception ->
             if(exception is IOException){
                 Log.d("error", exception.message.toString())
@@ -41,15 +25,22 @@ class SettingDatastore private constructor(private val dataStore: DataStore<Pref
                 throw exception
             }
         }.map { preferences ->
-            val id = preferences[ID] ?: ""
-            val email = preferences[EMAIL] ?: ""
-            val name = preferences[NAME] ?: ""
-            val default = preferences[DEFAULT_PROFILE] ?: 1
-            val photo = preferences[PHOTO_PROFILE] ?: ""
-            val jwtToken = preferences[JWT_TOKEN] ?: ""
-            InUserModel(id,email,name,default,photo,jwtToken,null)
+
+            val jwtToken = preferences[TOKEN] ?: "-token-"
+            jwtToken
         }
 
+    fun getDataToken() : Flow<String>{
+        return dataStore.data.map {
+            it[TOKEN] ?: "0"
+        }
+    }
+
+    suspend fun saveData(token: String) {
+        dataStore.edit { preferences ->
+            preferences[TOKEN] = token
+        }
+    }
 
     suspend fun deleteData() {
         dataStore.edit {
@@ -57,22 +48,22 @@ class SettingDatastore private constructor(private val dataStore: DataStore<Pref
         }
     }
 
-    suspend fun setData(inUserModel: InUserModel){
-        dataStore.edit {
-            it[ID] = inUserModel.userId!!
-            it[NAME] = inUserModel.name!!
-            it[JWT_TOKEN] = inUserModel.jwtToken!!
-            it[DEFAULT_PROFILE] = inUserModel.default_profile!!
-            it[EMAIL] = inUserModel.email!!
-            it[PHOTO_PROFILE] = inUserModel.photo_profile!!
-        }
+    suspend fun setData(token: String){
+            dataStore.edit {
+                it[TOKEN] = token
+            }
+
+
+    }
+
+    private object  PreferencesKeys{
+        val TOKEN = stringPreferencesKey("token")
     }
 
 
     companion object {
         @Volatile
         private var INSTANCE: SettingDatastore? = null
-
         fun getInstance(dataStore: DataStore<Preferences>): SettingDatastore {
             return INSTANCE ?: synchronized(this) {
                 val instance = SettingDatastore(dataStore)
@@ -81,4 +72,6 @@ class SettingDatastore private constructor(private val dataStore: DataStore<Pref
             }
         }
     }
+
+
 }
