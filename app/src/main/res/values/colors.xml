@@ -22,4 +22,7 @@
     <color name="grayBackground">#F5F5EF</color>
     <color name="blue_font_getstarted">#1E3B46</color>
 
+
+    <color name="placeholder">#6FB6B6B6</color>
+
 </resources>
