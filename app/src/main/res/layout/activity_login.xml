@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.auth.login.LoginActivity"
+    android:paddingHorizontal="20dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <ImageView
+            android:layout_marginTop="10dp"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:id="@+id/imgView"
+            android:layout_marginStart="20dp"
+            android:contentDescription="@string/logo"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/skincareoke"
+            />
+
+        <TextView
+            android:id="@+id/tvGetAnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/imgView"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="30dp"
+            android:text="@string/get_in_and"
+            android:textSize="23sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/nunito_regular"
+            />
+        <TextView
+            android:id="@+id/tvStartCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/tvGetAnd"
+            app:layout_constraintStart_toStartOf="@id/tvGetAnd"
+            android:text="@string/start_checking_your_skin"
+            android:textSize="23sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/nunito_regular"
+            />
+
+        <TextView
+            android:id="@+id/labelEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/tvStartCheck"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/email_address"
+            android:layout_marginTop="50dp"
+            android:textColor="#7D8797"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/nunito_regular"
+            />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_marginTop="6dp"
+            android:id="@+id/layoutEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/labelEmail"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputEmail"
+                android:background="@drawable/rounded_text"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:textSize="19sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/nunito_regular"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <TextView
+            android:id="@+id/labelPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/layoutEmail"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/password"
+            android:layout_marginTop="30dp"
+            android:textColor="#7D8797"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/nunito_regular"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_marginTop="6dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:id="@+id/layoutPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/labelPassword">
+
+            <com.example.skindiseasedetectionapp.ui.custom.CustomEditTextPassword
+                android:id="@+id/inputPassword"
+                android:inputType="textPassword"
+                android:background="@drawable/rounded_text"
+                android:layout_height="wrap_content"
+                android:drawablePadding="10dp"
+                android:layout_width="match_parent"
+                android:textSize="19sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/nunito_regular"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tvForgotPpass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/layoutPassword"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/forgor_password"
+            android:layout_marginTop="5dp"
+            android:textColor="#7D8797"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/nunito_regular"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnLogin"
+            android:background="@drawable/rounded_button_green"
+            android:text="@string/signin"
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            app:layout_constraintTop_toBottomOf="@+id/tvForgotPpass"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="35dp"
+            android:textStyle="bold"
+            android:fontFamily="@font/nunito_regular"
+            />
+
+
+
+        <TextView
+            android:id="@+id/tvSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/create_new_account"
+            android:textColor="#7D8797"
+            android:textSize="21sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/nunito_regular"
+            app:layout_constraintTop_toBottomOf="@id/btnLogin"
+            app:layout_constraintEnd_toEndOf="@id/btnLogin"
+            app:layout_constraintStart_toStartOf="@id/btnLogin"/>
+
+
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:visibility="visible"
+            android:visibility="gone"
+            android:indeterminate="true"
+            android:indeterminateTint="@android:color/black"
+            />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

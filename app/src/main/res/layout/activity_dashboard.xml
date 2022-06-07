@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    tools:context=".ui.dashboard.DashboardActivity">
+
+    <TextView
+        android:id="@+id/tvHello"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/helvetica"
+        android:text="@string/hello"
+        android:textSize="33sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imgLambay"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/tangan_png"
+        app:layout_constraintBottom_toBottomOf="@id/tvHello"
+        app:layout_constraintStart_toEndOf="@id/tvHello"
+        app:layout_constraintTop_toTopOf="@id/tvHello" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/helvetica"
+        android:text="@string/dummy_name"
+        android:textSize="23sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvHello" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imgProfile"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="5dp"
+        android:src="@drawable/gif_oke"
+        app:layout_constraintBottom_toBottomOf="@id/tvName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvHello"
+        app:shapeAppearanceOverlay="@style/rounded_profile_image_in_dashboard" />
+
+    <TextView
+        android:id="@+id/tvMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:fontFamily="@font/nunito_regular"
+        android:text="@string/menu"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvName" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/layoutMenu1"
+        android:layout_width="180dp"
+        android:layout_height="220dp"
+        android:layout_marginTop="20dp"
+        android:background="#F0F0F0"
+        app:layout_constraintBottom_toTopOf="@+id/layoutMenu3"
+        app:layout_constraintEnd_toStartOf="@+id/layoutMenu2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvMenu"
+        app:shapeAppearanceOverlay="@style/layout_menu" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/layoutMenu2"
+        android:layout_width="180dp"
+        android:layout_height="220dp"
+        android:layout_marginTop="20dp"
+        android:background="#F0F0F0"
+        app:layout_constraintBottom_toTopOf="@+id/layoutMenu4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/layoutMenu1"
+        app:layout_constraintTop_toBottomOf="@+id/tvMenu"
+        app:shapeAppearanceOverlay="@style/layout_menu" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/layoutMenu3"
+        android:layout_width="180dp"
+        android:layout_height="220dp"
+        android:layout_marginTop="10dp"
+        android:background="#F0F0F0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/layoutMenu4"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutMenu1"
+        app:shapeAppearanceOverlay="@style/layout_menu" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/layoutMenu4"
+        android:layout_width="180dp"
+        android:layout_height="220dp"
+        android:layout_marginTop="10dp"
+        android:background="#F0F0F0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/layoutMenu3"
+        app:layout_constraintTop_toBottomOf="@+id/layoutMenu2"
+        app:shapeAppearanceOverlay="@style/layout_menu" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/btnScan"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/scan_oke"
+        app:layout_constraintEnd_toEndOf="@id/layoutMenu1"
+        app:layout_constraintStart_toStartOf="@id/layoutMenu1"
+        app:layout_constraintTop_toTopOf="@id/layoutMenu1" />
+
+    <TextView
+        android:id="@+id/tvScan"
+        style="@style/nunito_bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/scan_now"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="@id/layoutMenu1"
+        app:layout_constraintStart_toStartOf="@id/layoutMenu1"
+        app:layout_constraintTop_toBottomOf="@id/btnScan" />
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/btnScanHistory"
+        android:layout_width="97dp"
+        android:layout_height="97dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/historyscan_oke"
+        app:layout_constraintEnd_toEndOf="@id/layoutMenu2"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="@id/layoutMenu2"
+        app:layout_constraintTop_toTopOf="@id/layoutMenu2"
+        app:layout_constraintVertical_bias="0.4" />
+
+    <TextView
+        android:id="@+id/tvScanHistory"
+        style="@style/nunito_bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/scan"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="@id/layoutMenu2"
+        app:layout_constraintStart_toStartOf="@id/layoutMenu2"
+        app:layout_constraintTop_toBottomOf="@id/btnScanHistory" />
+
+    <TextView
+        android:id="@+id/tvHistory"
+        style="@style/nunito_bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/history"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="@id/layoutMenu2"
+        app:layout_constraintStart_toStartOf="@id/layoutMenu2"
+        app:layout_constraintTop_toBottomOf="@id/tvScanHistory" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/btnProfiles"
+        android:layout_width="97dp"
+        android:layout_height="97dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/profile_oke"
+        app:layout_constraintEnd_toEndOf="@id/layoutMenu3"
+        app:layout_constraintStart_toStartOf="@id/layoutMenu3"
+        app:layout_constraintTop_toTopOf="@id/layoutMenu3" />
+
+    <TextView
+        android:id="@+id/tvProfiles"
+        style="@style/nunito_bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/profiles"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="@id/layoutMenu3"
+        app:layout_constraintStart_toStartOf="@id/layoutMenu3"
+        app:layout_constraintTop_toBottomOf="@id/btnProfiles" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/btnSetting"
+        android:layout_width="97dp"
+        android:layout_height="97dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/setting_oke"
+        app:layout_constraintEnd_toEndOf="@id/layoutMenu4"
+        app:layout_constraintStart_toStartOf="@id/layoutMenu4"
+        app:layout_constraintTop_toTopOf="@id/layoutMenu4" />
+
+    <TextView
+        android:id="@+id/tvSetting"
+        style="@style/nunito_bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/Settings"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="@id/layoutMenu4"
+        app:layout_constraintStart_toStartOf="@id/layoutMenu4"
+        app:layout_constraintTop_toBottomOf="@id/btnSetting" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

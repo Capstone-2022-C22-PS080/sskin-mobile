@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.auth.register.RegisterActivity"
+    android:padding="20dp"
+    >
+
+    <TextView
+        android:id="@+id/labelFullname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="30dp"
+        android:text="@string/full_name"
+        android:textSize="23sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/nunito_regular"
+        />
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_marginTop="10dp"
+        android:id="@+id/layoutName"
+        android:textStyle="bold"
+        android:fontFamily="@font/nunito_regular"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/labelFullname">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inputName"
+            android:background="@drawable/rounded_text"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textStyle="bold"
+            android:fontFamily="@font/nunito_regular"
+            android:textSize="19sp"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/labelEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/layoutName"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="30dp"
+        android:text="@string/email_address"
+        android:textSize="23sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/nunito_regular"
+        />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_marginTop="10dp"
+        android:id="@+id/layoutEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textStyle="bold"
+        android:fontFamily="@font/nunito_regular"
+        app:layout_constraintTop_toBottomOf="@+id/labelEmail"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inputEmail"
+            android:background="@drawable/rounded_text"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textStyle="bold"
+            android:fontFamily="@font/nunito_regular"
+            android:textSize="19sp"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/labelPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/layoutEmail"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="30dp"
+        android:text="@string/password"
+        android:textSize="23sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/nunito_regular"
+        />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_marginTop="10dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:id="@+id/layoutPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textStyle="bold"
+        android:fontFamily="@font/nunito_regular"
+        app:layout_constraintTop_toBottomOf="@+id/labelPassword"
+        >
+
+        <com.example.skindiseasedetectionapp.ui.custom.CustomEditTextPassword
+            android:id="@+id/inputPassword"
+            android:inputType="textPassword"
+            android:background="@drawable/rounded_text"
+            android:drawablePadding="10dp"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textSize="19sp"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/labelPassword2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/layoutPassword"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="30dp"
+        android:text="@string/re_enter_your_passsword"
+        android:textSize="23sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/nunito_regular"
+        />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_marginTop="10dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:id="@+id/layoutPassword2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textStyle="bold"
+        android:fontFamily="@font/nunito_regular"
+        app:layout_constraintTop_toBottomOf="@+id/labelPassword2"
+        >
+
+        <com.example.skindiseasedetectionapp.ui.custom.CustomEditTextPassword
+            android:id="@+id/inputPassword2"
+            android:inputType="textPassword"
+            android:background="@drawable/rounded_text"
+            android:drawablePadding="10dp"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textSize="19sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/nunito_regular"
+
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnRegister"
+        android:background="@drawable/rounded_button_green"
+        android:text="Continue"
+        app:layout_constraintTop_toBottomOf="@+id/layoutPassword2"
+        app:layout_constraintStart_toStartOf="@id/layoutPassword2"
+        app:layout_constraintEnd_toEndOf="@id/layoutPassword2"
+        android:layout_marginTop="50dp"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/nunito_regular"
+        />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible"
+        android:visibility="gone"
+        android:indeterminate="true"
+        android:indeterminateTint="@android:color/black"
+        />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

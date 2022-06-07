@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.core.UploadPhotoActivity"
+    android:paddingHorizontal="30dp"
+    >
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="210dp"
+        android:layout_height="210dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/list_profile"
+        android:id="@+id/list"
+        />
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="230dp"
+        android:layout_height="230dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="90dp"
+        android:src="@drawable/ic_baseline_account_circle_24"
+        android:id="@+id/imgProfile"
+        />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/add_in_profile"
+        app:layout_constraintEnd_toEndOf="@id/imgProfile"
+        app:layout_constraintBottom_toBottomOf="@id/imgProfile"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="17dp"
+        />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="29sp"
+        android:text="@string/christie_joe"
+        android:fontFamily="@font/nunito_regular"
+        android:textStyle="bold"
+        android:layout_marginTop="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imgProfile"
+        />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/upload_and_continue"
+        android:enabled="false"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:fontFamily="@font/nunito_regular"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        android:background="@drawable/rounded_button_green"
+        app:layout_constraintTop_toBottomOf="@+id/tvName"
+        android:layout_marginTop="90dp"
+        android:id="@+id/uploadButton"
+        />
+
+
+    <TextView
+        android:id="@+id/tvSkip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:text="@string/skip_for_this"
+        android:fontFamily="@font/nunito_regular"
+        android:textStyle="bold"
+        android:textColor="@color/graythick"
+        android:layout_marginTop="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/uploadButton"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
