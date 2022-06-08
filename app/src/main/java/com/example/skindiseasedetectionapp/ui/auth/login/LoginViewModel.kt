@@ -80,7 +80,8 @@ class LoginViewModel(private val datastore: SettingDatastore) : ViewModel() {
                                         if(task.isSuccessful){
                                             userNew = task.result.toObject(InUserModel::class.java)
                                             userNew?.jwtToken = token
-                                            saveToDataStore(body.jwtToken!!)
+//                                            saveToDataStore(body.jwtToken!!)
+                                            saveUserToDataStore(userNew!!)
                                             _inUserModel.value = userNew
                                             Log.d(TAG, "getProfiles: ${userNew?.email}")
                                         }else{
@@ -222,6 +223,15 @@ class LoginViewModel(private val datastore: SettingDatastore) : ViewModel() {
         viewModelScope.launch{
                 datastore.saveData(token)
         }
+    }
+
+    fun saveUserToDataStore(inUserModel: InUserModel){
+        if(inUserModel.userId != null){
+            viewModelScope.launch{
+                datastore.setData(userId = inUserModel.userId!!, email = inUserModel.email!!, name = inUserModel.name!!,inUserModel.default_profile!!,inUserModel.photo_profile!!,inUserModel.jwtToken!!)
+            }
+        }
+
     }
 
     fun getDataStore(): LiveData<String>{
