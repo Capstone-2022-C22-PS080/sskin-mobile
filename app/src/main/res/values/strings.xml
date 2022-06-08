@@ -84,4 +84,6 @@
     <string name="tray_again">Try Again</string>
     <string name="cancel">cancel</string>
     <string name="save">save</string>
+    <string name="image_preview">Image Preview From Gallery</string>
+
 </resources>

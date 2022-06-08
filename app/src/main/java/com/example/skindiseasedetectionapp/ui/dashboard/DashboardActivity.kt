@@ -50,20 +50,9 @@ class DashboardActivity : AppCompatActivity() {
             this,
             ViewModelFactory(pref)
         )[DashboardViewModel::class.java]
-
-        viewModel.getDatastore().observe(this){
-            if(it != ""){
-                updateUi(it)
-            }else{
-                finish()
-                startActivity(Intent(this@DashboardActivity, LoginActivity::class.java))
-            }
-
-        }
-
         viewModel.getDatastoreUser().observe(this){
             if(it != null && (it.userId == "" || it.userId != null)){
-                updateUi2(it)
+                updateUi(it)
 
             }else{
                 finish()
@@ -112,12 +101,8 @@ class DashboardActivity : AppCompatActivity() {
 
     }
 
-    private fun updateUi(inUserModel: String){
-        binding.tvName.text = inUserModel
 
-    }
-
-    private fun updateUi2(inUserModel: InUserModel){
+    private fun updateUi(inUserModel: InUserModel){
         if(inUserModel.photo_profile == "" || inUserModel == null){
             dialog.dismiss()
         }

@@ -1,7 +1,9 @@
 package com.example.skindiseasedetectionapp.ui.home
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -18,8 +20,12 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.fragment.app.FragmentManager
 import com.example.skindiseasedetectionapp.R
 import com.example.skindiseasedetectionapp.databinding.ActivityCameraBinding
+import com.example.skindiseasedetectionapp.ui.dashboard.DashboardActivity
+import com.example.skindiseasedetectionapp.ui.scan.LoadingScanFragment
+import com.example.skindiseasedetectionapp.utill.extToBase64
 import com.google.android.material.snackbar.Snackbar
 import com.google.common.util.concurrent.ListenableFuture
 import java.io.File
@@ -32,6 +38,9 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
     private lateinit var cameraSelector: CameraSelector
     private var imageCapture: ImageCapture? = null
+
+
+
     private lateinit var imgCaptureExecutor: ExecutorService
     private val cameraPermissionResult =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { permissionGranted ->
@@ -58,6 +67,8 @@ class CameraActivity : AppCompatActivity() {
         cameraPermissionResult.launch(android.Manifest.permission.CAMERA)
 
 
+
+
         binding.captureImage.setOnClickListener {
             takePhoto()
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -71,6 +82,10 @@ class CameraActivity : AppCompatActivity() {
                 CameraSelector.DEFAULT_BACK_CAMERA
             }
             startCamera()
+        }
+
+        binding.btnGalery.setOnClickListener {
+            takeFromGalery()
         }
 
 
@@ -94,6 +109,7 @@ class CameraActivity : AppCompatActivity() {
         val preview = Preview.Builder().build().also {
             it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
         }
+
         cameraProviderFuture.addListener({
             val cameraProvider = cameraProviderFuture.get()
 
@@ -109,17 +125,30 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun takePhoto() {
+
         imageCapture?.let {
-            val fileName = "JPEG_${System.currentTimeMillis()}"
-            val file = File(externalMediaDirs[0], fileName)
+            val fileName = "JPEG_${System.currentTimeMillis()}.jpg"
+             val file = File(externalMediaDirs[0], fileName)
             val outputFileOptions = ImageCapture.OutputFileOptions.Builder(file).build()
+
+
             it.takePicture(
                 outputFileOptions,
                 imgCaptureExecutor,
                 object : ImageCapture.OnImageSavedCallback {
                     override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                         Log.i(TAG, "The image has been saved in ${file.toUri()}")
+
+                        // panggil dari UI thread
+//                        this@CameraActivity.runOnUiThread {
+//                            toasting("gambar di convert ke base64 = ${file.extToBase64()}")
+//                        }
+                        val intent = Intent(this@CameraActivity, ScanResultActivity::class.java)
+                        intent.putExtra(ScanResultActivity.FILE,file)
+                        startActivity(intent)
                     }
+
+
 
                     override fun onError(exception: ImageCaptureException) {
                         Toast.makeText(
@@ -132,6 +161,8 @@ class CameraActivity : AppCompatActivity() {
 
                 })
         }
+
+
     }
 
     private fun hideSystemUI() {
@@ -157,9 +188,36 @@ class CameraActivity : AppCompatActivity() {
         }, 100)
     }
 
+    private val launcherIntentGallery = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val selectedImg: Uri = result.data?.data as Uri
+            Log.d(TAG, "${selectedImg.path}: ")
+
+            val intent = Intent(this@CameraActivity, ScanResultActivity::class.java)
+            intent.putExtra(ScanResultActivity.FROM_GALLERY,selectedImg)
+            startActivity(intent)
+
+        }
+    }
+
+    private fun takeFromGalery() {
+        val intent = Intent()
+        intent.action = Intent.ACTION_GET_CONTENT
+        intent.type = "image/*"
+        val chooser = Intent.createChooser(intent, "Choose a Picture")
+        launcherIntentGallery.launch(chooser)
+    }
+
+
+
     companion object{
         private const val TAG = "CameraActivity"
     }
 
+    private fun toasting(message: String){
+        Toast.makeText(this,message, Toast.LENGTH_LONG).show()
+    }
 
 }

@@ -71,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.btnLogin.setOnClickListener{
-           // startActivity(Intent(this@LoginActivity,DashboardActivity::class.java))
+           //startActivity(Intent(this@LoginActivity,DashboardActivity::class.java))
             logIn()
         }
 
