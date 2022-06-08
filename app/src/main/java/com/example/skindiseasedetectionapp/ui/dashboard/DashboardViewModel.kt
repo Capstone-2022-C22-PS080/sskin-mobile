@@ -32,21 +32,19 @@ class DashboardViewModel(private val settingDatastore: SettingDatastore) : ViewM
     }
     val text: LiveData<String> = _text
 
-    private lateinit var auth: FirebaseAuth
-    private lateinit var db : FirebaseFirestore
+    private var auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private var db : FirebaseFirestore = FirebaseFirestore.getInstance()
 
 
-    init {
-        auth = FirebaseAuth.getInstance()
-        db = FirebaseFirestore.getInstance()
-    }
-
-
-
-
-    fun getDatastore() : LiveData<InUserModel>{
+    fun getDatastore() : LiveData<String>{
         return settingDatastore.readFromDataStore.asLiveData()
     }
+
+    fun getDatastoreUser() : LiveData<InUserModel>{
+        return settingDatastore.readUserFromDataStore.asLiveData()
+    }
+
+
 
     fun clearDatastore(){
         viewModelScope.launch {

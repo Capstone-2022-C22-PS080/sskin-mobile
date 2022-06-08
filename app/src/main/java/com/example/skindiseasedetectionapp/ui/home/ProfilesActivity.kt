@@ -1,9 +1,11 @@
 package com.example.skindiseasedetectionapp.ui.home
 
+import android.app.Dialog
 import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
@@ -33,11 +35,11 @@ class ProfilesActivity : AppCompatActivity() {
         titleAction.text = resources.getString(R.string.profiles)
 
         binding.fabAdd.setOnClickListener {
-            val builder = AlertDialog.Builder(this@ProfilesActivity)
-            builder.setView(View.inflate(this@ProfilesActivity,R.layout.dialog_profiles,null))
-            builder.setTitle("Add Profile")
+            val dialog = Dialog(this)
+            dialog.setContentView(R.layout.dialog_profiles)
+            dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            dialog.show()
 
-            val dialog = builder.create()
             val btnCancel = dialog.findViewById<AppCompatButton>(R.id.btnCancel)
             val btnSave = dialog.findViewById<AppCompatButton>(R.id.btnSave)
 
