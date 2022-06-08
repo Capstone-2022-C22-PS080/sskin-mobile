@@ -4,7 +4,10 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.os.Environment
+import android.provider.MediaStore
+import android.util.Base64.encodeToString
 import com.example.skindiseasedetectionapp.R
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -60,4 +63,24 @@ fun rotateBitmap(bitmap: Bitmap, isBackCamera: Boolean = false): Bitmap {
             true
         )
     }
+}
+
+fun toBase64(path: String): String{
+    return try {
+        val stream = ByteArrayOutputStream()
+        val bytes = stream.toByteArray()
+        android.util.Base64.encodeToString(bytes,android.util.Base64.DEFAULT)
+    }catch (ex : Exception){
+        ""
+    }
+}
+
+fun File.extToBase64(): String? {
+    val result: String?
+    inputStream().use { inputStream ->
+        val sourceBytes = inputStream.readBytes()
+        result = android.util.Base64.encodeToString(sourceBytes, android.util.Base64.DEFAULT)
+    }
+
+    return result
 }
