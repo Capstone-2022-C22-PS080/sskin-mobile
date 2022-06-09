@@ -28,6 +28,12 @@ data class Uid(
     var uid: String? = null
 ) : Parcelable
 
+@Parcelize
+data class PredictionRequest(
+    @field:SerializedName("base64")
+    var base64: String? = null
+) : Parcelable
+
 
 @Parcelize
 data class Disease_Response(
@@ -59,4 +65,14 @@ data class DiseaseResponses(
     @field:SerializedName("message")
     var message: String? = null,
 
+    ) : Parcelable
+
+@Parcelize
+data class PredictionResponse(
+    @field:SerializedName("id")
+    var id: Int? = null,
+    @field:SerializedName("disease_name")
+    var disease_name: String? = null,
+    @field:SerializedName("disease_description")
+    var disease_description: String? = null,
     ) : Parcelable
