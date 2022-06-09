@@ -5,16 +5,28 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.skindiseasedetectionapp.setting.SettingDatastore
 import com.example.skindiseasedetectionapp.ui.auth.login.LoginViewModel
 import com.example.skindiseasedetectionapp.ui.dashboard.DashboardViewModel
+import com.example.skindiseasedetectionapp.ui.home.ImagePreviewGalleryViewModel
+import com.example.skindiseasedetectionapp.ui.home.ScanResultViewModel
 
 class ViewModelFactory(private val setting: SettingDatastore) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
-            return LoginViewModel(setting) as T
-        }else if (modelClass.isAssignableFrom(DashboardViewModel::class.java)) {
-            return DashboardViewModel(setting) as T
+        return when {
+            modelClass.isAssignableFrom(LoginViewModel::class.java) -> {
+                LoginViewModel(setting) as T
+            }
+            modelClass.isAssignableFrom(DashboardViewModel::class.java) -> {
+                DashboardViewModel(setting) as T
+            }
+            modelClass.isAssignableFrom(ScanResultViewModel::class.java) -> {
+                ScanResultViewModel(setting) as T
+            }
+            modelClass.isAssignableFrom(ImagePreviewGalleryViewModel::class.java) -> {
+                ImagePreviewGalleryViewModel(setting) as T
+            }
+            else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }
-        throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)    }
+    }
 
 }

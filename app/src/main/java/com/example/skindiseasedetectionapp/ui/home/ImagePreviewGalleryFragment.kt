@@ -1,26 +1,43 @@
 package com.example.skindiseasedetectionapp.ui.home
 
+import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import android.widget.Toast
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
-import com.example.skindiseasedetectionapp.R
+import androidx.lifecycle.ViewModelProvider
 import com.example.skindiseasedetectionapp.databinding.FragmentImagePreviewGalleryBinding
+import com.example.skindiseasedetectionapp.setting.SettingDatastore
+import com.example.skindiseasedetectionapp.utill.ViewModelFactory
+import com.example.skindiseasedetectionapp.utill.uriToFile
+import java.io.File
+import java.io.IOException
+import java.net.URI
 
-// TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val URI_PARAM = "uri_param"
+
 
 /**
  * A simple [Fragment] subclass.
  * Use the [ImagePreviewGalleryFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 class ImagePreviewGalleryFragment : Fragment() {
-    // TODO: Rename and change types of parameters
+
     private var uriParam: String? = null
+    private var dataStoreParam: SettingDatastore? = null
     private lateinit var binding: FragmentImagePreviewGalleryBinding
+    private lateinit var viewModel: ImagePreviewGalleryViewModel
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,9 +59,27 @@ class ImagePreviewGalleryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         hideSystemUI()
+
+        val pref = requireContext().dataStore
+        val setting = SettingDatastore.getInstance(pref)
+        viewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(setting)
+        )[ImagePreviewGalleryViewModel::class.java]
+
         val uri = Uri.parse(uriParam)
+
         binding.photoView.setImageURI(uri)
-        binding.btnScan.z = 2f
+        binding.btnScan.setOnClickListener {
+            if(uri != null){
+                val myFile = uriToFile(uri, application = requireActivity().application)
+                viewModel.getDataStore().observe(viewLifecycleOwner){
+                    if(it.jwtToken != null){
+                        viewModel.prediction(it.jwtToken!!,myFile)
+                    }
+                }
+            }
+        }
 
     }
 
@@ -60,6 +95,10 @@ class ImagePreviewGalleryFragment : Fragment() {
         }
     }
 
+    private fun toasting(msg: String){
+        Toast.makeText(requireContext(),msg,Toast.LENGTH_SHORT).show()
+    }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -68,7 +107,8 @@ class ImagePreviewGalleryFragment : Fragment() {
          * @param param1 Parameter 1.
          * @return A new instance of fragment ImagePreviewGalleryFragment.
          */
-        // TODO: Rename and change types and number of parameters
+        const val TAG = "imagePreviewGallery"
+
         @JvmStatic fun newInstance(param1: String) =
                 ImagePreviewGalleryFragment().apply {
                     arguments = Bundle().apply {

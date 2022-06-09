@@ -80,22 +80,24 @@ fun File.extToBase64(): String? {
     val result: String?
     inputStream().use { inputStream ->
         val sourceBytes = inputStream.readBytes()
-        result = android.util.Base64.encodeToString(sourceBytes, android.util.Base64.DEFAULT)
+        result = android.util.Base64.encodeToString(sourceBytes, android.util.Base64.NO_WRAP)
     }
 
     return result
 }
 
 
-fun uriToFile(selectedImg: Uri, context: Context): File {
-    val contentResolver: ContentResolver = context.contentResolver
-    val myFile = createCustomTempFile(context)
+fun uriToFile(selectedImg: Uri, application: Application): File {
+    val contentResolver: ContentResolver = application.applicationContext.contentResolver
+    val myFile = createFile(application)
 
     val inputStream = contentResolver.openInputStream(selectedImg) as InputStream
     val outputStream: OutputStream = FileOutputStream(myFile)
     val buf = ByteArray(1024)
     var len: Int
-    while (inputStream.read(buf).also { len = it } > 0) outputStream.write(buf, 0, len)
+    while (inputStream.read(buf).also {
+            len = it
+    } > 0) outputStream.write(buf, 0, len)
     outputStream.close()
     inputStream.close()
 

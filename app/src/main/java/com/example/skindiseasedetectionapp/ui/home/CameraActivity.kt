@@ -26,6 +26,7 @@ import com.example.skindiseasedetectionapp.databinding.ActivityCameraBinding
 import com.example.skindiseasedetectionapp.ui.dashboard.DashboardActivity
 import com.example.skindiseasedetectionapp.ui.scan.LoadingScanFragment
 import com.example.skindiseasedetectionapp.utill.extToBase64
+import com.example.skindiseasedetectionapp.utill.uriToFile
 import com.google.android.material.snackbar.Snackbar
 import com.google.common.util.concurrent.ListenableFuture
 import java.io.File
@@ -192,22 +193,33 @@ class CameraActivity : AppCompatActivity() {
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == RESULT_OK) {
+            result.data
             val selectedImg: Uri = result.data?.data as Uri
             Log.d(TAG, "${selectedImg.path}: ")
 
             val intent = Intent(this@CameraActivity, ScanResultActivity::class.java)
             intent.putExtra(ScanResultActivity.FROM_GALLERY,selectedImg)
             startActivity(intent)
+            finish()
 
         }
     }
 
     private fun takeFromGalery() {
-        val intent = Intent()
-        intent.action = Intent.ACTION_GET_CONTENT
-        intent.type = "image/*"
-        val chooser = Intent.createChooser(intent, "Choose a Picture")
-        launcherIntentGallery.launch(chooser)
+        if(Build.VERSION.SDK_INT < 19){
+            val intent = Intent()
+            intent.action = Intent.ACTION_GET_CONTENT
+            intent.type = "image/*"
+            val chooser = Intent.createChooser(intent, "Choose a Picture")
+            launcherIntentGallery.launch(chooser)
+        }else{
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+            intent.addCategory(Intent.CATEGORY_OPENABLE)
+            intent.type = "image/*"
+            val chooser = Intent.createChooser(intent, "Choose a Picture")
+            launcherIntentGallery.launch(chooser)
+        }
+
     }
 
 
