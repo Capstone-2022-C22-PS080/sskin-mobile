@@ -1,9 +1,7 @@
 package com.example.skindiseasedetectionapp.api
 
 
-import com.example.skindiseasedetectionapp.model.DiseaseResponses
-import com.example.skindiseasedetectionapp.model.JwtToken
-import com.example.skindiseasedetectionapp.model.Uid
+import com.example.skindiseasedetectionapp.model.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -19,11 +17,12 @@ interface ApiService {
         @Body uid: Uid
     ): Call<JwtToken>
 
-    @FormUrlEncoded
+    @Headers("Accept: application/json",
+        "Content-Type: application/json")
     @POST("/predictions")
     fun getPrediction(
-        @Header("Content-type") type: String = "application/json",
-        @Field("base64") base64: String
-    ): Call<DiseaseResponses>
+        @Header("Authorization") token: String,
+        @Body predictionRequest: PredictionRequest
+    ): Call<PredictionResponse>
 
 }
