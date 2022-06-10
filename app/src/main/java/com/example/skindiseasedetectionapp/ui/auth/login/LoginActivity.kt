@@ -14,6 +14,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.example.skindiseasedetectionapp.R
 import com.example.skindiseasedetectionapp.databinding.ActivityLoginBinding
+import com.example.skindiseasedetectionapp.model.InUserModel
 import com.example.skindiseasedetectionapp.setting.SettingDatastore
 import com.example.skindiseasedetectionapp.ui.auth.register.RegisterActivity
 import com.example.skindiseasedetectionapp.ui.dashboard.DashboardActivity
@@ -57,9 +58,6 @@ class LoginActivity : AppCompatActivity() {
                     toasting(str.toString())
                     if(str.toString().contains("Success")){
                         clearInput()
-                        finish()
-                        startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
-
                     }
             }
         }
@@ -73,6 +71,14 @@ class LoginActivity : AppCompatActivity() {
         binding.btnLogin.setOnClickListener{
            //startActivity(Intent(this@LoginActivity,DashboardActivity::class.java))
             logIn()
+           viewModel.inUserModel.observe(this){
+               if(it != null){
+                   finish()
+                   val intent = Intent(this@LoginActivity, DashboardActivity::class.java)
+                   intent.putExtra(DashboardActivity.EXTRA_USER,it)
+                   startActivity(intent)
+               }
+           }
         }
 
 

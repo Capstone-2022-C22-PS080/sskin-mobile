@@ -1,10 +1,7 @@
 package com.example.skindiseasedetectionapp.ui.home
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.skindiseasedetectionapp.api.ApiConfig
 import com.example.skindiseasedetectionapp.model.InUserModel
 import com.example.skindiseasedetectionapp.model.PredictionRequest
@@ -18,6 +15,9 @@ import retrofit2.Response
 import java.io.File
 
 class ImagePreviewGalleryViewModel(private val datastore: SettingDatastore) : ViewModel() {
+
+    private val _predictionResponse: MutableLiveData<PredictionResponse?> = MutableLiveData<PredictionResponse?>()
+    val predictionResponse: LiveData<PredictionResponse?> = _predictionResponse
 
     fun prediction(token: String,file: File){
         if(token != null && file != null){
@@ -36,6 +36,7 @@ class ImagePreviewGalleryViewModel(private val datastore: SettingDatastore) : Vi
                             if(response.body() != null && response.isSuccessful && response.code() == 200){
                                 Log.d(ScanResultActivity.TAG, "onResponse: berhasil upload foto ")
                                 val body = response.body()
+                                _predictionResponse.value = body
                                 Log.d(ScanResultActivity.TAG, "onResponse: berhasil prediksi penyakit ${body?.disease_name} ")
                             }
                         }

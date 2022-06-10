@@ -32,51 +32,57 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDashboardBinding
     private lateinit var viewModel: DashboardViewModel
     private lateinit var dialog: Dialog
+    private var inUserModel : InUserModel? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setUp()
+        bindViewModel()
+        updateUi(inUserModel!!)
+        bindEvent()
+
+    }
+
+    private fun setUp(){
         supportActionBar?.hide()
         dialog = Dialog(this)
         dialog.setContentView(R.layout.layout_loading)
         dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         dialog.show()
+    }
 
 
+    private fun updateUi(inUserModel: InUserModel){
+       binding.tvName.text = inUserModel.email
+        binding.imgProfile.setImageDrawable(getDrawable(R.drawable.ic_baseline_account_circle_24))
+    }
 
+    private fun bindViewModel(){
         val pref = SettingDatastore.getInstance(dataStore)
         viewModel = ViewModelProvider(
             this,
             ViewModelFactory(pref)
         )[DashboardViewModel::class.java]
-        viewModel.getDatastoreUser().observe(this){
-            if(it != null && (it.userId == "" || it.userId != null)){
-                updateUi(it)
 
-            }else{
-                finish()
-                startActivity(Intent(this@DashboardActivity, LoginActivity::class.java))
-            }
+        inUserModel = intent.getParcelableExtra<InUserModel>(EXTRA_USER)!! as InUserModel
 
-        }
-
-
-
-        auth = Firebase.auth
-
-        val firebaseUser = auth.currentUser
-
-        if (firebaseUser == null) {
-            // Not signed in, launch the Login activity
-            startActivity(Intent(this, LoginActivity::class.java))
+        if(inUserModel == null){
             finish()
+            startActivity(Intent(this@DashboardActivity, LoginActivity::class.java))
             return
         }
+    }
+
+    private fun bindEvent(){
+
 
         binding.btnProfiles.setOnClickListener {
-            startActivity(Intent(this@DashboardActivity,ProfilesActivity::class.java))
-
+            val intent = Intent(this@DashboardActivity,ProfilesActivity::class.java)
+            intent.putExtra(ProfilesActivity.EXTRA_USER,inUserModel)
+            startActivity(intent)
         }
 
         binding.btnScan.setOnClickListener {
@@ -97,21 +103,10 @@ class DashboardActivity : AppCompatActivity() {
             startActivity(Intent(this@DashboardActivity,LoginActivity::class.java))
 
         }
-
-
-    }
-
-
-    private fun updateUi(inUserModel: InUserModel){
-        if(inUserModel.photo_profile == "" || inUserModel == null){
-            dialog.dismiss()
-        }
-        binding.tvName.text = inUserModel.name
-        Log.d(TAG, "updateUi2: ${inUserModel.jwtToken}")
-
     }
     
     companion object{
         val TAG = "DashboardActivity"
+        const val EXTRA_USER = "extra_user"
     }
 }

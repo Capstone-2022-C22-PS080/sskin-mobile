@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.skindiseasedetectionapp.setting.SettingDatastore
 import com.example.skindiseasedetectionapp.ui.auth.login.LoginViewModel
 import com.example.skindiseasedetectionapp.ui.dashboard.DashboardViewModel
+import com.example.skindiseasedetectionapp.ui.front.GetStartedViewModel
 import com.example.skindiseasedetectionapp.ui.home.ImagePreviewGalleryViewModel
 import com.example.skindiseasedetectionapp.ui.home.ScanResultViewModel
 
@@ -24,6 +25,9 @@ class ViewModelFactory(private val setting: SettingDatastore) : ViewModelProvide
             }
             modelClass.isAssignableFrom(ImagePreviewGalleryViewModel::class.java) -> {
                 ImagePreviewGalleryViewModel(setting) as T
+            }
+            modelClass.isAssignableFrom(GetStartedViewModel::class.java) -> {
+                GetStartedViewModel(setting) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

@@ -1,6 +1,7 @@
 package com.example.skindiseasedetectionapp.ui.home
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -12,8 +13,11 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.skindiseasedetectionapp.R
 import com.example.skindiseasedetectionapp.databinding.FragmentImagePreviewGalleryBinding
 import com.example.skindiseasedetectionapp.setting.SettingDatastore
+import com.example.skindiseasedetectionapp.ui.scan.ResultScanActivity
+import com.example.skindiseasedetectionapp.ui.scan.ScanResultFragment
 import com.example.skindiseasedetectionapp.utill.ViewModelFactory
 import com.example.skindiseasedetectionapp.utill.uriToFile
 import java.io.File
@@ -37,6 +41,8 @@ class ImagePreviewGalleryFragment : Fragment() {
     private var dataStoreParam: SettingDatastore? = null
     private lateinit var binding: FragmentImagePreviewGalleryBinding
     private lateinit var viewModel: ImagePreviewGalleryViewModel
+
+
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 
@@ -76,6 +82,14 @@ class ImagePreviewGalleryFragment : Fragment() {
                 viewModel.getDataStore().observe(viewLifecycleOwner){
                     if(it.jwtToken != null){
                         viewModel.prediction(it.jwtToken!!,myFile)
+                        viewModel.predictionResponse.observe(viewLifecycleOwner){ predic->
+
+                            val intent = Intent(requireActivity(),ResultScanActivity::class.java)
+                            intent.putExtra("PREDICTION",predic)
+                            intent.putExtra("URI",uri.toString())
+                            startActivity(intent)
+
+                        }
                     }
                 }
             }

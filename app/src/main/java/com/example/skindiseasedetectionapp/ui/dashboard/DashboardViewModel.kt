@@ -1,8 +1,10 @@
 package com.example.skindiseasedetectionapp.ui.dashboard
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.skindiseasedetectionapp.model.InUserModel
 import com.example.skindiseasedetectionapp.setting.SettingDatastore
+import com.example.skindiseasedetectionapp.ui.auth.login.LoginActivity
 import com.example.skindiseasedetectionapp.utill.Event
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -26,7 +28,6 @@ class DashboardViewModel(private val settingDatastore: SettingDatastore) : ViewM
     private val _currentUser: MutableLiveData<FirebaseUser> = MutableLiveData<FirebaseUser>()
     val currentUser: LiveData<FirebaseUser> = _currentUser
 
-
     private val _text = MutableLiveData<String>().apply {
         value = "This is dashboard Fragment"
     }
@@ -34,15 +35,6 @@ class DashboardViewModel(private val settingDatastore: SettingDatastore) : ViewM
 
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
     private var db : FirebaseFirestore = FirebaseFirestore.getInstance()
-
-
-    fun getDatastore() : LiveData<String>{
-        return settingDatastore.readFromDataStore.asLiveData()
-    }
-
-    fun getDatastoreUser() : LiveData<InUserModel>{
-        return settingDatastore.readUserFromDataStore.asLiveData()
-    }
 
 
 

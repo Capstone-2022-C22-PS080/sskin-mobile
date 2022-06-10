@@ -20,25 +20,6 @@ import java.io.Serializable
 
 class SettingDatastore private constructor(private val dataStore: DataStore<Preferences>) {
 
-    private val JWT_TOKEN = stringPreferencesKey("jwt_token")
-
-
-
-
-    val readFromDataStore : Flow<String> = dataStore.data
-        .catch { exception ->
-            if(exception is IOException){
-                Log.d("error", exception.message.toString())
-                emit(emptyPreferences())
-            }else{
-                throw exception
-            }
-        }.map { preferences ->
-
-            val jwtToken = preferences[TOKEN] ?: "-token-"
-            jwtToken
-        }
-
     val readUserFromDataStore : Flow<InUserModel> = dataStore.data
         .catch { exception ->
             if(exception is IOException){
@@ -54,7 +35,16 @@ class SettingDatastore private constructor(private val dataStore: DataStore<Pref
             val default = preferences[DEFAULT] ?: 0
             val jwtToken = preferences[TOKEN] ?: ""
             val photo = preferences[PHOTO_URL] ?: ""
-            InUserModel(userId = userId,email = email, name = name, default_profile = default,photo,jwtToken,null )
+            InUserModel(
+                userId = userId,
+                email = email,
+                name = name,
+                default_profile = default,
+                photo,
+                jwtToken,
+                null
+            )
+
         }
 
     fun getDataToken() : Flow<String>{

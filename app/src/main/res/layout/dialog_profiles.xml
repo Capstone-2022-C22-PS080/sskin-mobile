@@ -12,18 +12,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/list_profile"
         android:id="@+id/list"
         />
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:layout_width="180dp"
-        android:layout_height="180dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="70dp"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:layout_width="195dp"
+        android:layout_height="190dp"
+        style="@style/rounded_profile_image_in_dashboard"
+        app:layout_constraintTop_toTopOf="@id/list"
+        app:layout_constraintStart_toStartOf="@id/list"
+        app:layout_constraintEnd_toEndOf="@id/list"
+        app:layout_constraintBottom_toBottomOf="@id/list"
         android:src="@drawable/ic_baseline_account_circle_24"
         android:id="@+id/imgProfile"
         />
@@ -45,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imgProfile"
+        app:layout_constraintTop_toBottomOf="@id/list"
         android:layout_marginTop="30dp"
         android:text="@string/full_name"
         android:textSize="23sp"
@@ -82,31 +83,59 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/cancel"
-        app:layout_constraintTop_toBottomOf="@id/layoutName"
+        app:layout_constraintTop_toBottomOf="@id/cbSetProfile"
         app:layout_constraintStart_toStartOf="parent"
         android:background="@drawable/rounded_button_green"
         app:layout_constraintEnd_toStartOf="@id/btnSave"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
         android:textColor="@color/white"
         android:textSize="23sp"
         />
 
+    <CheckBox
+        android:id="@+id/cbSetProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/layoutName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btnCancel"
+        android:text="@string/set_as_main_profile"
+        android:textSize="18sp"
+        />
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnSave"
-        android:layout_marginTop="20dp"
         android:layout_marginStart="10dp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/save"
         android:textColor="@color/white"
         android:textSize="23sp"
-        app:layout_constraintTop_toBottomOf="@id/layoutName"
+        app:layout_constraintTop_toBottomOf="@id/cbSetProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/btnCancel"
         android:background="@drawable/rounded_button_green"
         app:layout_constraintBottom_toBottomOf="parent"
         />
+
+    <ProgressBar
+        android:id="@+id/progressBarDialog"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        tools:visibility="visible"
+        android:visibility="gone"
+        android:indeterminate="true"
+        android:indeterminateTint="@android:color/black"
+        />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

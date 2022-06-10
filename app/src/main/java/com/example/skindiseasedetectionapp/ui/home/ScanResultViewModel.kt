@@ -1,10 +1,7 @@
 package com.example.skindiseasedetectionapp.ui.home
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.skindiseasedetectionapp.api.ApiConfig
 import com.example.skindiseasedetectionapp.model.InUserModel
 import com.example.skindiseasedetectionapp.model.PredictionRequest
@@ -21,6 +18,10 @@ import java.util.*
 
 class ScanResultViewModel(private val datastore: SettingDatastore) : ViewModel() {
 
+
+    private val _predictionResponse: MutableLiveData<PredictionResponse?> = MutableLiveData<PredictionResponse?>()
+    val predictionResponse: LiveData<PredictionResponse?> = _predictionResponse
+
     fun prediction(token: String,file: File){
         if(token != null && file != null){
             Log.d(TAG, "prediction: ${file.extToBase64()}")
@@ -36,14 +37,18 @@ class ScanResultViewModel(private val datastore: SettingDatastore) : ViewModel()
                             response: Response<PredictionResponse>
                         ) {
                             if(response.body() != null && response.isSuccessful && response.code() == 200){
+
                                 Log.d(TAG, "onResponse: berhasil upload foto ")
                                 val body = response.body()
-                                Log.d(TAG, "onResponse: berhasil prediksi penyakit ${body?.disease_name} ")
+//                                Log.d(TAG, "onResponse: berhasil prediksi penyakit ${body?.disease_name} ${body?.id} ")
+                                _predictionResponse.value = body!!
+                            }else{
+                                _predictionResponse.value = null
                             }
                         }
 
                         override fun onFailure(call: Call<PredictionResponse>, t: Throwable) {
-
+                            _predictionResponse.value = null
                             t.printStackTrace()
                         }
 

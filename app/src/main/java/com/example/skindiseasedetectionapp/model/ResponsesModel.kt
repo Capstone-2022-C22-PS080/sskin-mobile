@@ -75,4 +75,6 @@ data class PredictionResponse(
     var disease_name: String? = null,
     @field:SerializedName("disease_description")
     var disease_description: String? = null,
+    @field:SerializedName("first_aid_description")
+    var first_aid_description: String? = null,
     ) : Parcelable

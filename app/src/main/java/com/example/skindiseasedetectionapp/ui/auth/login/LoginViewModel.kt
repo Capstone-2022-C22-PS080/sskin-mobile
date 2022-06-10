@@ -80,7 +80,9 @@ class LoginViewModel(private val datastore: SettingDatastore) : ViewModel() {
                                         if(task.isSuccessful){
                                             userNew = task.result.toObject(InUserModel::class.java)
                                             userNew?.jwtToken = token
+                                           // userNew?.profiles = null
 //                                            saveToDataStore(body.jwtToken!!)
+                                            Log.d(TAG, "onResponse: ${userNew?.profiles?.get(0)?.name}")
                                             saveUserToDataStore(userNew!!)
                                             _inUserModel.value = userNew
                                             Log.d(TAG, "getProfiles: ${userNew?.email}")
@@ -131,6 +133,7 @@ class LoginViewModel(private val datastore: SettingDatastore) : ViewModel() {
                 }
                 .addOnFailureListener {
                     it.printStackTrace()
+                    _inUserModel.value = null
                     _messageLogin.value = Event(it.message!!)
                     _loading.setValue(false)
                 }
@@ -151,80 +154,6 @@ class LoginViewModel(private val datastore: SettingDatastore) : ViewModel() {
 
 
 
-    private fun getProfiles(user: FirebaseUser?){
-        Log.d(LoginActivity.TAG, "getProfiles: ${user?.uid} ")
-        val docRef = user?.uid?.let { db.collection("users").document(it) }
-        docRef?.get()?.addOnSuccessListener {
-            if (it != null) {
-                Log.d(TAG, "DocumentSnapshot data: ${it.data}")
-                _messageAddFirebaseUser.value = Event("Success")
-                _inUserModel.value = it.toObject(InUserModel::class.java)
-                Log.d(TAG, "getProfiles: ${_inUserModel.value?.email}")
-
-            } else {
-                Log.d(TAG, "No such document")
-                _inUserModel.value = null
-
-                _messageAddFirebaseUser.value = Event("No Such Document")
-            }
-
-        }?.addOnFailureListener {
-            Log.d(TAG, "get failed with ", it)
-            _messageAddFirebaseUser.value = Event(it.message.toString())
-            it.printStackTrace()
-        }?.addOnCompleteListener {
-
-        }
-
-    }
-
-    private fun getTokenFromApi(uid: String){
-        val client = ApiConfig.getApiServce().getToken(Uid(uid))
-        client.enqueue(object : Callback<JwtToken>{
-            override fun onResponse(
-                call: Call<JwtToken>,
-                response: Response<JwtToken>
-            ) {
-                _loading.value = false
-                if(response.isSuccessful && response.body() != null){
-                    val body = response.body()
-                    if (body != null) {
-                        _inUserModel.value?.jwtToken = body.jwtToken
-
-                    }
-
-                    _loading.value = false
-                    //  _response.value = body
-                }else{
-                    _loading.value = false
-                    val stringJson = response.errorBody()!!.string()
-                    try{
-                        val json = JSONObject(stringJson)
-                        Log.d(TAG, "onResponse: failed make jwtToken ${json.getString("message")}")
-                        // _message.value = Event(json.getString("message"))
-                        //_response.value = Response(error = true, message = json.getString("message"))
-                    }catch (e: JSONException){
-                        e.printStackTrace()
-                    }
-
-                }
-            }
-
-            override fun onFailure(call: Call<JwtToken>, t: Throwable) {
-                _loading.value = false
-                t.printStackTrace()
-            }
-
-        })
-
-    }
-
-     fun saveToDataStore(token: String){
-        viewModelScope.launch{
-                datastore.saveData(token)
-        }
-    }
-
     fun saveUserToDataStore(inUserModel: InUserModel){
         if(inUserModel.userId != null){
             viewModelScope.launch{
@@ -232,18 +161,6 @@ class LoginViewModel(private val datastore: SettingDatastore) : ViewModel() {
             }
         }
 
-    }
-
-    fun getDataStore(): LiveData<String>{
-        return datastore.readFromDataStore.asLiveData(viewModelScope.coroutineContext)
-    }
-
-    fun getTOken(): LiveData<String>{
-        return datastore.getDataToken().asLiveData()
-    }
-
-    fun getCurrentUser(): FirebaseUser?{
-        return currentUser.value
     }
 
 

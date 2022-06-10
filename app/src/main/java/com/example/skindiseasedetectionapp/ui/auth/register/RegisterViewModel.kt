@@ -63,10 +63,6 @@ class RegisterViewModel : ViewModel() {
                         _messageRegis.postValue(Event("Register Successfully!"))
                         addUserInAdd(user,name,date)
 
-
-
-
-
                     } else {
                         Log.w(RegisterActivity.TAG, "createUserWithEmail:failure", task.exception)
                         _messageRegis.postValue(Event(task.exception!!.message.toString()))

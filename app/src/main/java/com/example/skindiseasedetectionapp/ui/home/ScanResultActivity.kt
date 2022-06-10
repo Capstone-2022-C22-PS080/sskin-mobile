@@ -1,6 +1,7 @@
 package com.example.skindiseasedetectionapp.ui.home
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -17,6 +18,8 @@ import com.example.skindiseasedetectionapp.R
 import com.example.skindiseasedetectionapp.databinding.ActivityScanResultBinding
 import com.example.skindiseasedetectionapp.setting.SettingDatastore
 import com.example.skindiseasedetectionapp.ui.scan.LoadingScanFragment
+import com.example.skindiseasedetectionapp.ui.scan.ResultScanActivity
+import com.example.skindiseasedetectionapp.ui.scan.ScanResultFragment
 import com.example.skindiseasedetectionapp.utill.ViewModelFactory
 import java.io.File
 
@@ -83,7 +86,15 @@ class ScanResultActivity : AppCompatActivity() {
 
             val file = intent.getSerializableExtra(FILE) as File
             viewModel.getDataStore().observe(this){
-                it.jwtToken?.let { it1 -> viewModel.prediction(it1,file) }
+                viewModel.prediction(it.jwtToken!!,file)
+                viewModel.predictionResponse.observe(this){ predictResponse ->
+                    if(predictResponse != null){
+                        val intent = Intent(this, ResultScanActivity::class.java)
+                        intent.putExtra("PREDICTION",predictResponse)
+                        intent.putExtra("URI",uriFromGallery.toString())
+                        startActivity(intent)
+                    }
+                }
             }
 
 
