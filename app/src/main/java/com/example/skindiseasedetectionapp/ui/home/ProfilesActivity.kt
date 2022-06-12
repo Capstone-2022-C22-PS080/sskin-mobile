@@ -1,16 +1,16 @@
 package com.example.skindiseasedetectionapp.ui.home
 
 import android.app.Dialog
-import android.content.DialogInterface
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
-import android.widget.*
+import android.widget.CheckBox
+import android.widget.ProgressBar
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.lifecycle.ViewModelProvider
@@ -18,13 +18,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.skindiseasedetectionapp.R
 import com.example.skindiseasedetectionapp.databinding.ActivityProfilesBinding
 import com.example.skindiseasedetectionapp.model.InUserModel
-import com.example.skindiseasedetectionapp.model.ProfilesUser
 import com.example.skindiseasedetectionapp.ui.adapters.ProfilesAdapter
-import com.example.skindiseasedetectionapp.ui.dashboard.DashboardActivity
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.Timestamp
-import com.google.firebase.firestore.FieldValue
 
 class ProfilesActivity : AppCompatActivity() {
     private lateinit var backBtn: AppCompatImageButton
@@ -41,6 +37,9 @@ class ProfilesActivity : AppCompatActivity() {
     private lateinit var progressbarDialog: ProgressBar
     private lateinit var checkBoxDialog: CheckBox
     private lateinit var photoProfileDialog: ShapeableImageView
+    private var flag = "add"
+    private var indexForEdit = -1
+    private var idForedit = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,26 +59,41 @@ class ProfilesActivity : AppCompatActivity() {
             showLoadingDialog(it)
         }
 
-
-
-
-        val adapterProfile = ProfilesAdapter{
-
-        }
-
-
-
-        if(users != null ){
-            Log.d(TAG, "onCreate: users ga kosong")
-            viewModel.setProfiles(users?.userId!!)
-            viewModel.inUserModel.observe(this){
-                if (it != null) {
-                    users!!.profiles = it.profiles
-                    adapterProfile.submitList(it.profiles)
-                }
+        viewModel.messageAdd.observe(this) { str ->
+            str.getContentIfNotHandled().let { str2 ->
+                toasting(str2.toString())
             }
-
         }
+
+
+
+
+
+
+
+
+        val adapterProfile = ProfilesAdapter({
+            if( it!= null){
+                dialog.setTitle("Edit Profile")
+                dialog.show()
+                flag = "edit"
+                idForedit = it.id!!
+                inputNameDialog.setText(it.name!!)
+            }
+        },{
+            if( it!= null){
+                viewModel.deleteProfileById(it.id!!, users?.userId!!)
+            }
+        })
+
+        viewModel.inUserModel.observe(this){
+            if (it != null) {
+                users!!.profiles = it.profiles
+                adapterProfile.submitList(it.profiles)
+            }
+        }
+
+        viewModel.setProfiles(users?.userId!!)
 
         binding.listProfile.apply {
             layoutManager = LinearLayoutManager(context)
@@ -100,10 +114,11 @@ class ProfilesActivity : AppCompatActivity() {
         users = intent.getParcelableExtra<InUserModel>(EXTRA_USER)!! as InUserModel
 
 
+
         dialog = Dialog(this)
         dialog.setContentView(R.layout.dialog_profiles)
         dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-
+        dialog.setTitle("Add Profile")
 
         btnCancel = dialog.findViewById<AppCompatButton>(R.id.btnCancel)
         btnSave = dialog.findViewById<AppCompatButton>(R.id.btnSave)
@@ -127,25 +142,31 @@ class ProfilesActivity : AppCompatActivity() {
         }
 
         btnSave.setOnClickListener {
-            val name = inputNameDialog.text?.toString()?.trim()
-            val id = viewModel.getId(docId = users?.userId!!)
-            val createAt = FieldValue.serverTimestamp()
 
+            val name = inputNameDialog.text?.toString()?.trim()
             if(name?.isEmpty()!!){
                 toasting("please Fill the form first")
                 return@setOnClickListener
             }
 
-            val newProfile = ProfilesUser(fotoUrl = "",id = id,name = name, Timestamp(java.util.Date()))
+
 
             if(dialog.isShowing){
-                viewModel.addProfile(users?.userId!!,newProfile)
-                viewModel.messageAdd.observe(this) {
-                    it.getContentIfNotHandled().let { str ->
-                        toasting(str.toString())
-                        dialog.dismiss()
+                if(flag == "add"){
+                    val size = users?.profiles?.size ?: 0
+                    if(size > 0){
+                        viewModel.addProfile(users?.userId!!,name)
+
                     }
+                }else{
+                    viewModel.editProfile(idForedit, users?.userId!!,name)
+                    flag="add"
+                    dialog.setTitle("Add Profile")
+                    inputNameDialog.setText("")
                 }
+
+                dialog.dismiss()
+
 
             }
 

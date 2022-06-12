@@ -15,7 +15,7 @@ import com.example.skindiseasedetectionapp.databinding.ListRowProfilesBinding
 import com.example.skindiseasedetectionapp.model.ProfilesUser
 import java.text.SimpleDateFormat
 
-class ProfilesAdapter(private val onProfileClick: (ProfilesUser) -> Unit) :
+class ProfilesAdapter(private val onProfileClick: (ProfilesUser) -> Unit,private val onButtonDelete: (ProfilesUser) -> Unit) :
     androidx.recyclerview.widget.ListAdapter<ProfilesUser, ProfilesAdapter.ProfileViewHolder>(DIFF_CALLBACK) {
 
 
@@ -34,6 +34,11 @@ class ProfilesAdapter(private val onProfileClick: (ProfilesUser) -> Unit) :
         val editImage = holder.binding.editButton
         editImage.setOnClickListener {
             onProfileClick(profile)
+        }
+
+        val deleteImage = holder.binding.deleteButton
+        deleteImage.setOnClickListener {
+            onButtonDelete(profile)
         }
 
 

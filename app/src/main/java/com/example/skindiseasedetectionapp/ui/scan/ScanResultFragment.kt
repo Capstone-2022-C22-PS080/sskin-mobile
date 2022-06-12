@@ -42,12 +42,15 @@ class ScanResultFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        parentFragmentManager.popBackStack()
 //        predictionResponse = arguments?.getParcelable<PredictionResponse>(EXTRA_DATA)!! as PredictionResponse
-        val img = arguments?.getString("URI") as String
+//        val img = arguments?.getString("URI") as String
 //        binding.tvDiagnose.text = predictionResponse!!.disease_name
 //        binding.tvDesc.text = predictionResponse!!.disease_description
-        binding.imgResult.setImageURI(Uri.parse(img))
+  //      binding.imgResult.setImageURI(Uri.parse(img))
     }
+
+
 
 
     companion object {

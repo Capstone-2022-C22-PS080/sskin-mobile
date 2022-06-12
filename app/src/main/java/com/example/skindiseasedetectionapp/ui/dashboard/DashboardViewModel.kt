@@ -37,6 +37,26 @@ class DashboardViewModel(private val settingDatastore: SettingDatastore) : ViewM
     private var db : FirebaseFirestore = FirebaseFirestore.getInstance()
 
 
+    fun getData(docId : String){
+        if(docId != null){
+            db.collection("users").document(docId)
+                .get()
+                .addOnFailureListener {  ex->
+                    _inUserModel.value = null
+                }
+                .addOnSuccessListener {  doc ->
+                    if(doc != null){
+                        val user = doc.toObject(InUserModel::class.java)
+                        Log.d(DashboardActivity.TAG, "getData: ${user?.profiles?.size} ")
+                        _inUserModel.value = user
+                    }
+                    _inUserModel.value = null
+                }
+
+        }
+    }
+
+
 
     fun clearDatastore(){
         viewModelScope.launch {

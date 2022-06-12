@@ -132,7 +132,6 @@ class CameraActivity : AppCompatActivity() {
              val file = File(externalMediaDirs[0], fileName)
             val outputFileOptions = ImageCapture.OutputFileOptions.Builder(file).build()
 
-
             it.takePicture(
                 outputFileOptions,
                 imgCaptureExecutor,
@@ -140,12 +139,8 @@ class CameraActivity : AppCompatActivity() {
                     override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                         Log.i(TAG, "The image has been saved in ${file.toUri()}")
 
-                        // panggil dari UI thread
-//                        this@CameraActivity.runOnUiThread {
-//                            toasting("gambar di convert ke base64 = ${file.extToBase64()}")
-//                        }
                         val intent = Intent(this@CameraActivity, ScanResultActivity::class.java)
-                        intent.putExtra(ScanResultActivity.FILE,file)
+                        intent.putExtra(ScanResultActivity.EXTRA_URI,file.toUri().toString())
                         startActivity(intent)
                     }
 
@@ -198,7 +193,7 @@ class CameraActivity : AppCompatActivity() {
             Log.d(TAG, "${selectedImg.path}: ")
 
             val intent = Intent(this@CameraActivity, ScanResultActivity::class.java)
-            intent.putExtra(ScanResultActivity.FROM_GALLERY,selectedImg)
+            intent.putExtra(ScanResultActivity.EXTRA_URI,selectedImg.toString())
             startActivity(intent)
             finish()
 
@@ -226,6 +221,7 @@ class CameraActivity : AppCompatActivity() {
 
     companion object{
         private const val TAG = "CameraActivity"
+
     }
 
     private fun toasting(message: String){

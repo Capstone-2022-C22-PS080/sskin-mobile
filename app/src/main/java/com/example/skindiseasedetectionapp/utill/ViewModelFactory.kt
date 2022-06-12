@@ -8,6 +8,7 @@ import com.example.skindiseasedetectionapp.ui.dashboard.DashboardViewModel
 import com.example.skindiseasedetectionapp.ui.front.GetStartedViewModel
 import com.example.skindiseasedetectionapp.ui.home.ImagePreviewGalleryViewModel
 import com.example.skindiseasedetectionapp.ui.home.ScanResultViewModel
+import com.example.skindiseasedetectionapp.ui.scan.LoadingViewModel
 
 class ViewModelFactory(private val setting: SettingDatastore) : ViewModelProvider.NewInstanceFactory() {
 
@@ -28,6 +29,9 @@ class ViewModelFactory(private val setting: SettingDatastore) : ViewModelProvide
             }
             modelClass.isAssignableFrom(GetStartedViewModel::class.java) -> {
                 GetStartedViewModel(setting) as T
+            }
+            modelClass.isAssignableFrom(LoadingViewModel::class.java) -> {
+                LoadingViewModel(setting) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
         }

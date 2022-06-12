@@ -12,4 +12,8 @@ data class ProfilesUser(
     var id : Int? = null,
     var name: String?= null,
     var created_at : Timestamp?= null
-): Parcelable
+): Parcelable{
+    override fun equals(obj: Any?): Boolean {
+        return this.id == (obj as ProfilesUser).id && this.name == obj.name && this.fotoUrl == obj.fotoUrl && this.created_at == obj.created_at
+    }
+}

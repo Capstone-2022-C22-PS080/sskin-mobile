@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.skindiseasedetectionapp.R
 import com.example.skindiseasedetectionapp.databinding.FragmentImagePreviewGalleryBinding
 import com.example.skindiseasedetectionapp.setting.SettingDatastore
+import com.example.skindiseasedetectionapp.ui.scan.LoadingScanFragment
 import com.example.skindiseasedetectionapp.ui.scan.ResultScanActivity
 import com.example.skindiseasedetectionapp.ui.scan.ScanResultFragment
 import com.example.skindiseasedetectionapp.utill.ViewModelFactory
@@ -34,14 +35,14 @@ private const val URI_PARAM = "uri_param"
  * create an instance of this fragment.
  */
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+
 class ImagePreviewGalleryFragment : Fragment() {
 
     private var uriParam: String? = null
     private var dataStoreParam: SettingDatastore? = null
     private lateinit var binding: FragmentImagePreviewGalleryBinding
     private lateinit var viewModel: ImagePreviewGalleryViewModel
-
+    private var loadingFragment: LoadingScanFragment? = null
 
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
@@ -78,20 +79,31 @@ class ImagePreviewGalleryFragment : Fragment() {
         binding.photoView.setImageURI(uri)
         binding.btnScan.setOnClickListener {
             if(uri != null){
-                val myFile = uriToFile(uri, application = requireActivity().application)
-                viewModel.getDataStore().observe(viewLifecycleOwner){
-                    if(it.jwtToken != null){
-                        viewModel.prediction(it.jwtToken!!,myFile)
-                        viewModel.predictionResponse.observe(viewLifecycleOwner){ predic->
 
-                            val intent = Intent(requireActivity(),ResultScanActivity::class.java)
-                            intent.putExtra("PREDICTION",predic)
-                            intent.putExtra("URI",uri.toString())
-                            startActivity(intent)
-
-                        }
-                    }
+                loadingFragment = LoadingScanFragment.newInstance(uriParam!!)
+                if(loadingFragment != null){
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.container_scan_result, loadingFragment!!,LoadingScanFragment::class.java.simpleName)
+                        .addToBackStack(null)
+                        .commit()
                 }
+
+
+//                val myFile = uriToFile(uri, application = requireActivity().application)
+//                viewModel.getDataStore().observe(viewLifecycleOwner){
+//                    if(it.jwtToken != null){
+//                        viewModel.prediction(it.jwtToken!!,myFile)
+//                        viewModel.predictionResponse.observe(viewLifecycleOwner){ predic->
+//                            val intent = Intent(requireActivity(),ResultScanActivity::class.java)
+//                            intent.putExtra("PREDICTION",predic)
+//                            intent.putExtra("URI",uri.toString())
+//                            startActivity(intent)
+//
+//                        }
+//                    }
+//                }
+
+
             }
         }
 

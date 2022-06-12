@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.skindiseasedetectionapp.R
 import com.example.skindiseasedetectionapp.databinding.ActivityDashboardBinding
 import com.example.skindiseasedetectionapp.model.InUserModel
+import com.example.skindiseasedetectionapp.model.ProfilesUser
 import com.example.skindiseasedetectionapp.setting.SettingDatastore
 import com.example.skindiseasedetectionapp.ui.auth.login.LoginActivity
 import com.example.skindiseasedetectionapp.ui.home.CameraActivity
@@ -28,7 +29,7 @@ import com.google.firebase.ktx.Firebase
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 class DashboardActivity : AppCompatActivity() {
-    private lateinit var auth: FirebaseAuth
+
     private lateinit var binding: ActivityDashboardBinding
     private lateinit var viewModel: DashboardViewModel
     private lateinit var dialog: Dialog
@@ -41,7 +42,6 @@ class DashboardActivity : AppCompatActivity() {
 
         setUp()
         bindViewModel()
-        updateUi(inUserModel!!)
         bindEvent()
 
     }
@@ -51,13 +51,24 @@ class DashboardActivity : AppCompatActivity() {
         dialog = Dialog(this)
         dialog.setContentView(R.layout.layout_loading)
         dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.setCanceledOnTouchOutside(false)
         dialog.show()
     }
 
 
-    private fun updateUi(inUserModel: InUserModel){
-       binding.tvName.text = inUserModel.email
-        binding.imgProfile.setImageDrawable(getDrawable(R.drawable.ic_baseline_account_circle_24))
+    private fun updateUi(user: InUserModel){
+        if(user.profiles != null){
+            user.profiles?.forEach {
+               if( it.id == inUserModel?.default_profile ) {
+                   binding.tvName.text = it.name
+                   binding.imgProfile.setImageDrawable(getDrawable(R.drawable.ic_baseline_account_circle_24))
+                   dialog.dismiss()
+                   return@forEach
+               }
+            }
+        }
+
+
     }
 
     private fun bindViewModel(){
@@ -73,6 +84,13 @@ class DashboardActivity : AppCompatActivity() {
             finish()
             startActivity(Intent(this@DashboardActivity, LoginActivity::class.java))
             return
+        }
+
+        viewModel.getData(inUserModel?.userId!!)
+        viewModel.inUserModel.observe(this){
+            if(it != null){
+                updateUi(it)
+            }
         }
     }
 
