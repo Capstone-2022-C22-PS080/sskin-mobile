@@ -5,18 +5,17 @@ import android.util.Log
 import androidx.core.net.toUri
 import androidx.lifecycle.*
 import com.example.skindiseasedetectionapp.api.ApiConfig
-import com.example.skindiseasedetectionapp.model.DetectionHistories
-import com.example.skindiseasedetectionapp.model.InUserModel
-import com.example.skindiseasedetectionapp.model.PredictionRequest
-import com.example.skindiseasedetectionapp.model.PredictionResponse
+import com.example.skindiseasedetectionapp.model.*
 import com.example.skindiseasedetectionapp.setting.SettingDatastore
 import com.example.skindiseasedetectionapp.ui.home.ScanResultActivity
 import com.example.skindiseasedetectionapp.utill.extToBase64
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.launch
+import okhttp3.internal.cookieToString
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -83,7 +82,7 @@ class LoadingViewModel(private val datastore: SettingDatastore) : ViewModel() {
         val today = Date()
         val formattedDate = sdf.format(today)
         val mStorageRef = storage.reference
-        mStorageRef.child("detection_user/${inUserModel.userId}/${inUserModel.default_profile}/${predictionResponse.id}-$formattedDate.${uri.lastPathSegment}")
+        mStorageRef.child("detection_user/${inUserModel.userId}/defProf${inUserModel.default_profile}-${predictionResponse.id}-$formattedDate")
             .putFile(uri)
             .addOnSuccessListener { uploadTask ->
                 Log.d(LoadingScanFragment.TAG,"berhasil upload")
@@ -104,23 +103,54 @@ class LoadingViewModel(private val datastore: SettingDatastore) : ViewModel() {
 
     private fun insertToDetectionDb(uri: String,predictionResponse: PredictionResponse, user: InUserModel,today: Date){
 
+        val collection = db.collection("detection_histories")
+
         if(predictionResponse != null && user != null){
             val detection = DetectionHistories(
                 uri, predictionResponse.id,user.default_profile,user.userId,
-                Timestamp(today)
+                Timestamp(today),
+    1,predictionResponse.disease_name,predictionResponse.disease_description,predictionResponse.first_aid_description
             )
-            db.collection("detection_histories").document(detection.userId!!)
-                .set(detection)
-                .addOnSuccessListener {
-                    _success.value = true
-                    Log.d(LoadingScanFragment.TAG, "insertToDetectionDb: ")
-                    _predictionResponse.value = predictionResponse
+            collection.document(detection.userId.toString())
+                .get()
+                .addOnSuccessListener { doc->
+                    val counter = doc.get("result_detection")
+                    if(doc != null && doc.data != null){
+                        if(!doc.exists()){
+                           collection.document(detection.userId!!)
+                               .set(ResultDetection(
+                                   arrayOf(detection).asList()
+                               ))
+                               .addOnSuccessListener {
+                                    _success.value = true
+                                   _predictionResponse.value = predictionResponse
+                               }
+                               .addOnFailureListener {
+                                   it.printStackTrace()
+                                   _success.value = true
+                                   _predictionResponse.value = null
+                               }
+                        }else{
+                            collection.document(detection.userId!!)
+                                .update("result_detection",FieldValue.arrayUnion(detection))
+                                .addOnSuccessListener {
+                                     _success.value = true
+                                    _predictionResponse.value = predictionResponse
+                                }
+                                .addOnFailureListener {
+                                    it.printStackTrace()
+                                    _success.value = true
+                                    _predictionResponse.value = null
+                                }
+                        }
 
-                }.addOnFailureListener {  ex->
-                    _success.value = false
-                    ex.printStackTrace()
-                    _predictionResponse.value = null
+                    }
+
                 }
+                .addOnFailureListener {
+                    _success.value = true
+                }
+
         }
 
     }

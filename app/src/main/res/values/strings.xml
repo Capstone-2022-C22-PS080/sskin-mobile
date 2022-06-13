@@ -86,5 +86,6 @@
     <string name="save">save</string>
     <string name="image_preview">Image Preview From Gallery</string>
     <string name="set_as_main_profile">Set As Main Profile</string>
+    <string name="finish">Finish</string>
 
 </resources>

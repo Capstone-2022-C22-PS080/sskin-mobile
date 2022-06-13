@@ -3,6 +3,7 @@ package com.example.skindiseasedetectionapp.ui.dashboard
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.ViewGroup
@@ -11,6 +12,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.skindiseasedetectionapp.R
 import com.example.skindiseasedetectionapp.databinding.ActivityDashboardBinding
 import com.example.skindiseasedetectionapp.model.InUserModel
@@ -90,6 +93,7 @@ class DashboardActivity : AppCompatActivity() {
         viewModel.inUserModel.observe(this){
             if(it != null){
                 updateUi(it)
+
             }
         }
     }
@@ -101,10 +105,12 @@ class DashboardActivity : AppCompatActivity() {
             val intent = Intent(this@DashboardActivity,ProfilesActivity::class.java)
             intent.putExtra(ProfilesActivity.EXTRA_USER,inUserModel)
             startActivity(intent)
+            finish()
         }
 
         binding.btnScan.setOnClickListener {
             startActivity(Intent(this@DashboardActivity,CameraActivity::class.java))
+            finish()
         }
 
         binding.btnScanHistory.setOnClickListener {

@@ -128,6 +128,22 @@ android:padding="25dp">
         android:layout_marginTop="5dp"
         />
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnFinish"
+        android:background="@drawable/rounded_button_green"
+        android:text="Continue"
+        app:layout_constraintTop_toBottomOf="@+id/tvDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="50dp"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/nunito_regular"
+        />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

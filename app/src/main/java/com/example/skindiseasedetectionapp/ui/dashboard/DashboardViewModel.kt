@@ -1,10 +1,14 @@
 package com.example.skindiseasedetectionapp.ui.dashboard
 
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.skindiseasedetectionapp.model.DetectionHistories
 import com.example.skindiseasedetectionapp.model.InUserModel
+import com.example.skindiseasedetectionapp.model.ResultDetection
 import com.example.skindiseasedetectionapp.setting.SettingDatastore
-import com.example.skindiseasedetectionapp.ui.auth.login.LoginActivity
 import com.example.skindiseasedetectionapp.utill.Event
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -55,7 +59,6 @@ class DashboardViewModel(private val settingDatastore: SettingDatastore) : ViewM
 
         }
     }
-
 
 
     fun clearDatastore(){

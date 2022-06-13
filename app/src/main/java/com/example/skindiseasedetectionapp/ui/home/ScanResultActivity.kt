@@ -68,6 +68,7 @@ class ScanResultActivity : AppCompatActivity() {
         val fragment = mFragmentManager.findFragmentByTag(ImagePreviewGalleryFragment::class.java.simpleName)
 
         if (fragment !is ImagePreviewGalleryFragment) {
+            titleAction.text = "Result"
             Log.d("MyFlexibleFragment", "Fragment Name :" + ImagePreviewGalleryFragment::class.java.simpleName)
             mFragmentManager
                 .beginTransaction()
